@@ -4,4 +4,4 @@ import os
 
 load_dotenv(verbose=True)
 
-DISCORD_APP_SECRET = os.getenv('DISCORD_APP_SECRET')
+DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
