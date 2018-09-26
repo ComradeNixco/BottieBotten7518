@@ -1,5 +1,6 @@
 # use config.ENVVARNAME to use a env var
 import config
+import discord
 import random
 
 from discord.ext import commands
@@ -46,12 +47,12 @@ async def on_message(msg):
         exit()
 
 
-
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('-----')
+    await bot.change_presence(game=discord.Game(name='To all you say', type=2))
 
 bot.run(config.DISCORD_BOT_TOKEN)
