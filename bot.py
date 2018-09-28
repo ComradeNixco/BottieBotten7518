@@ -36,6 +36,10 @@ async def roll(dice: str):
         await bot.say('Maximum de 100 par roulement!!')
         return
 
+    if rolls <= 0:
+        await bot.say('Il doit y avoir au moins un dé a lancé!!')
+        return
+
     if limit < 1:
         await bot.say('La valeur du dé doit être plus grande que 0!')
         return
@@ -51,24 +55,28 @@ async def on_message(msg):
 
     # Process registered Commands
     await bot.process_commands(msg)
+    msg_content = msg.clean_content
 
-    if msg.content.lower() == 'haha':
+    if msg_content.lower() == 'haha':
         await bot.send_message(msg.channel, 'yes')
 
-    if msg.content.lower().find('8') != -1:
+    if msg_content.lower().find('8') != -1:
         await bot.send_message(msg.channel, 'haha 8')
 
-    if msg.content.lower().find('nice') != -1:
+    if msg_content.lower().find('∞') != -1:
+        await bot.send_message(msg.channel, '😭😭😭∞ isn\'t 8😭😭😭')
+
+    if msg_content.lower().find('nice') != -1:
         await bot.send_message(msg.channel, 'Fucking ***NICE***')
 
-    if msg.content.lower().find('number 1') != -1:
+    if msg_content.lower().find('number 1') != -1:
         await bot.send_message(msg.channel, 'F Robbie Rotten, Born a villain, Died a Hero 😭')
 
-    if msg.content.lower().find('oof') != -1:
+    if msg_content.lower().find('oof') != -1:
         choices = ['Big *OOF*', 'Roblox death sound', 'Oof oww my bones hurt a lot\nOof ouch oww owie my bonessss']
         await bot.send_message(msg.channel, random.choice(choices))
 
-    if msg.content == '!shutdown!' and msg.author.nick == 'Camarade Nicolas L.':
+    if msg_content == '!shutdown!' and msg.author.nick == 'Camarade Nicolas L.':
         await bot.close()
 
 
