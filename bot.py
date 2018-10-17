@@ -1,15 +1,18 @@
 # use config.ENVVARNAME to use a env var
 import config
 import discord
+import logging
 import random
 
 from discord.ext import commands
+
+logging.basicConfig(level=logging.INFO)
 
 
 # Go to `https://discordapp.com/oauth2/authorize?client_id=494271504570122240&scope=bot` to add this bot to a server
 
 description = '''
-Bot pour le channel discrod du club info
+Bot pour le channel discord du club informatique du cégep de Saint-Hyacinthe
 '''
 bot = commands.Bot(command_prefix='!', description=description)
 
@@ -48,6 +51,26 @@ async def roll(dice: str):
     sResults = ', '.join(str(i) for i in iResults)
     await bot.say('Résultat(s): {0}.\nPour un total de: {1}'.format(sResults, sum(iResults)))
 
+@bot.command()
+async def think():
+    """
+    Donne une pensée, probablement philosophique
+    """
+
+    messages =  [
+        "Une patate c'est pas une carotte, pourtant les deux vienne de la terre",
+        "Si le vide est l'absence de matière, est-il possible d'être plein de vide?",
+        "On nous dit toujours de ne jamais juger un livre par sa couverture mais les couvertures de livres sont spécialement creer pour emettre un jugement sur le livre",
+        "Est ce que les chiens pense que lorsque ont leur dis que ce sont des bons chien que cest une commande pour etre heureux et il ne font qu'obeir ou sont t'ils vraiment de bon chien ??",
+        "À notre 35e aniversaire nous aurons vecue pendans 420 mois O_O",
+        "Dans un jour lointain la plupars des compte en ligne vont apartenir a des personnes décédé.",
+        "Dans le future, les enfants jouant avec des petite auto et des motos ne feront plus de bruit de moteur car les voitures électriques seront plus courantes.",
+        "Quelqu'un pourait deja avoir découvert comment se mettre invisible et ferais juste niaiser le monde au lieux de le montrer au monde.",
+        "Les stations radio dans les jeux videos sont infiniment meilleur que les stations radio dans la vrais vie, pourquoi ??",
+    ]
+    msg = random.choice(messages)
+    await bot.say(f":thinking: {msg} :thinking:")
+
 @bot.event
 async def on_message(msg):
     if msg.author == bot.user:
@@ -57,11 +80,8 @@ async def on_message(msg):
     await bot.process_commands(msg)
     msg_content = msg.clean_content
 
-    if msg_content.lower() == 'haha':
+    if msg_content.lower()[-4:] == 'haha':
         await bot.send_message(msg.channel, 'yes')
-
-    if msg_content.lower().find('8') != -1:
-        await bot.send_message(msg.channel, 'haha 8')
 
     if msg_content.lower().find('∞') != -1:
         await bot.send_message(msg.channel, '😭😭😭∞ isn\'t 8😭😭😭')
