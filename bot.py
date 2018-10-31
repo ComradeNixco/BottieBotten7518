@@ -6,6 +6,7 @@ import random
 
 from discord.ext import commands
 
+
 logging.basicConfig(level=logging.INFO)
 
 
@@ -67,6 +68,7 @@ async def think():
         "Dans le future, les enfants jouant avec des petite auto et des motos ne feront plus de bruit de moteur car les voitures électriques seront plus courantes.",
         "Quelqu'un pourait deja avoir découvert comment se mettre invisible et ferais juste niaiser le monde au lieux de le montrer au monde.",
         "Les stations radio dans les jeux videos sont infiniment meilleur que les stations radio dans la vrais vie, pourquoi ??",
+        "Lorsque vous utilisez les caisses libre service au supermarché cest comme si vous faissiez du travail non rémunérer pour le supermarcher",
     ]
     msg = random.choice(messages)
     await bot.say(f":thinking: {msg} :thinking:")
