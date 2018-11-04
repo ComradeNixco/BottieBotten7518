@@ -66,8 +66,11 @@ class TriggerManager:
         return decorator
 
     async def process_triggers(self, msg):
+        """
+        Process the discord message `msg` to check if some triggers has to be executed
+        """
         for t in self.triggers:
-            if t.is_triggered(msg):
+            if t.is_triggered(msg.clean_content):
                 # WARN: This runs each triggers (if needed) non-concurrently one after another
                 # WARN: updating python to 3.7 gives the ability to create easily tasks that can run concurrent awaitables
-                await t.func()
+                await t.func(msg)

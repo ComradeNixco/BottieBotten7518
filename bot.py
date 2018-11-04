@@ -4,6 +4,8 @@ import discord
 import logging
 import random
 
+import TriggerManager
+
 from discord.ext import commands
 
 
@@ -16,6 +18,7 @@ description = '''
 Bot pour le channel discord du club informatique du cégep de Saint-Hyacinthe
 '''
 bot = commands.Bot(command_prefix='!', description=description)
+trigger_manager = TriggerManager.TriggerManager()
 
 @bot.command()
 async def add(left: int, right: int):
@@ -73,6 +76,20 @@ async def think():
     msg = random.choice(messages)
     await bot.say(f":thinking: {msg} :thinking:")
 
+@trigger_manager.trigger()
+async def kek(msg):
+    if msg.author == bot.user:
+        return
+
+    await bot.send_message(msg.channel, '?!?')
+
+@trigger_manager.trigger('WoWoW', TriggerManager.TriggerOptions.ENDS | TriggerManager.TriggerOptions.CASE_SENSITIVE)
+async def wowow(msg):
+    if msg.author == bot.user:
+        return
+
+    await bot.send_message(msg.channel, 'wOwOw')
+
 @bot.event
 async def on_message(msg):
     if msg.author == bot.user:
@@ -80,6 +97,7 @@ async def on_message(msg):
 
     # Process registered Commands
     await bot.process_commands(msg)
+    await trigger_manager.process_triggers(msg)
     msg_content = msg.clean_content
 
     if msg_content.lower()[-4:] == 'haha':
