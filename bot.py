@@ -75,9 +75,12 @@ async def think():
     msg = random.choice(messages)
     await bot.say(f":thinking: {msg} :thinking:")
 
-@bot.command(name='shutdown!')
-async def shutdown():
-    await bot.logout()
+@bot.command(name='shutdown!', pass_context=True)
+async def shutdown(ctx):
+    if ctx.message.author.nick == 'Camarade Nicolas L.':
+        await bot.logout()
+    else:
+        await bot.say('Vous n\'avez pas le droit d\'utiliser cette commande!!')
 
 @tm.trigger(options=TriggerOptions.ENDS)
 async def haha(msg):
