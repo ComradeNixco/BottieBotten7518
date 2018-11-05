@@ -3,11 +3,10 @@ import config
 import discord
 import logging
 import random
-
-import TriggerManager
-
 from discord.ext import commands
 
+import TriggerManager
+from TriggerManager import TriggerOptions
 
 logging.basicConfig(level=logging.INFO)
 
@@ -18,7 +17,7 @@ description = '''
 Bot pour le channel discord du club informatique du cégep de Saint-Hyacinthe
 '''
 bot = commands.Bot(command_prefix='!', description=description)
-trigger_manager = TriggerManager.TriggerManager()
+tm = TriggerManager.TriggerManager()
 
 @bot.command()
 async def add(left: int, right: int):
@@ -76,48 +75,34 @@ async def think():
     msg = random.choice(messages)
     await bot.say(f":thinking: {msg} :thinking:")
 
-@trigger_manager.trigger()
-async def kek(msg):
-    if msg.author == bot.user:
-        return
+@bot.command(name='shutdown!')
+async def shutdown():
+    await bot.logout()
 
-    await bot.send_message(msg.channel, '?!?')
+@tm.trigger(options=TriggerOptions.ENDS)
+async def haha(msg):
+    await bot.send_message(msg.channel, 'yes')
 
-@trigger_manager.trigger('WoWoW', TriggerManager.TriggerOptions.ENDS | TriggerManager.TriggerOptions.CASE_SENSITIVE)
-async def wowow(msg):
-    if msg.author == bot.user:
-        return
+@tm.trigger(trigger="number 1")
+async def number_1(msg):
+    await bot.send_message(msg.channel, 'F Robbie Rotten, Born a villain, Died a Hero 😭')
 
-    await bot.send_message(msg.channel, 'wOwOw')
+@tm.trigger()
+async def nice(msg):
+    await bot.send_message(msg.channel, 'Fucking ***N I C E***')
+
+@tm.trigger()
+async def oof(msg):
+    choices = ['Big *OOF*', 'Roblox death sound', 'Oof oww my bones hurt a lot\nOof ouch oww owie my bonessss']
+    await bot.send_message(msg.channel, random.choice(choices))
 
 @bot.event
 async def on_message(msg):
     if msg.author == bot.user:
         return
 
-    # Process registered Commands
     await bot.process_commands(msg)
-    await trigger_manager.process_triggers(msg)
-    msg_content = msg.clean_content
-
-    if msg_content.lower()[-4:] == 'haha':
-        await bot.send_message(msg.channel, 'yes')
-
-    if msg_content.lower().find('∞') != -1:
-        await bot.send_message(msg.channel, '😭😭😭∞ isn\'t 8😭😭😭')
-
-    if msg_content.lower().find('nice') != -1:
-        await bot.send_message(msg.channel, 'Fucking ***NICE***')
-
-    if msg_content.lower().find('number 1') != -1:
-        await bot.send_message(msg.channel, 'F Robbie Rotten, Born a villain, Died a Hero 😭')
-
-    if msg_content.lower().find('oof') != -1:
-        choices = ['Big *OOF*', 'Roblox death sound', 'Oof oww my bones hurt a lot\nOof ouch oww owie my bonessss']
-        await bot.send_message(msg.channel, random.choice(choices))
-
-    if msg_content == '!shutdown!' and msg.author.nick == 'Camarade Nicolas L.':
-        await bot.close()
+    await tm.process_triggers(msg)
 
 
 @bot.event
